@@ -53,7 +53,7 @@ export const Loginaction=(data)=>{
             },
           },
         );
-
+ console.log(res)
         if (res.data.status) {
           dispatch({
             type: SIGNUP_ACTION,

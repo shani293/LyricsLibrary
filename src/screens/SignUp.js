@@ -4,13 +4,15 @@ import Input from '../components/TextInput';
 import ButtonLarge from '../components/ButtonLarge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { launchImageLibrary } from 'react-native-image-picker';
+import {Signupaction} from '../Redux/Action/Action'
 
+import {connect} from 'react-redux';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const options = {}
 
-function SignUp({ navigation }) {
+function SignUp({ navigation,Signupaction }) {
     const [fullName, setFullName] = useState("")
     const [userName, setUserName] = useState("")
     const [email, setEmail] = useState("")
@@ -38,6 +40,55 @@ function SignUp({ navigation }) {
             keyboardDidShowListener.remove();
         };
     }, []);
+
+    const check= async()=>{
+
+
+        if(email=='')
+        {
+            alert('Enter Email')
+        }
+        else if(password=='')
+        {
+            alert('Enter password')
+        }
+        else if(userName=='')
+        {
+            alert('Enter Username')
+        }
+        else if(fullName=='')
+        {
+            alert('Enter FullName')
+        }
+        // else if(image=='')
+        // {
+        //     alert('Enter Image')
+        // }
+
+        else {
+        const formdata=new FormData();
+        formdata.append('fullName',fullName);
+        formdata.append('password',password);
+        formdata.append('email',email);
+        formdata.append('userName',userName);
+        formdata.append('file',{uri:image,name:'IMG_'+ new Date().getTime(),type:'image/jpeg'});
+       console.log(formdata)
+        const res=await Signupaction(formdata);
+    console.log('halooooooooooooooooooooooooooooooooooooooooooooooooooo',res)
+
+    navigation.navigate('Login')
+        }
+    //     if(res.data!=0)
+    //     {
+    //         navigation.navigate('Login')
+    //     }
+    //     else{
+    // console.log('not Correct')
+    //     }
+
+    //     }
+
+                }
 
     const selectImage = () => {
         launchImageLibrary(options, (response) => {
@@ -108,7 +159,7 @@ function SignUp({ navigation }) {
                     value={confirmPassword}
                 />
 
-                <ButtonLarge  onPress={() => navigation.navigate("Login")} title="Sign Up" />
+                <ButtonLarge  onPress={check} title="Sign Up" />
 
             </ScrollView>
             {!isKeyboardVisible ?
@@ -138,7 +189,6 @@ function SignUp({ navigation }) {
     );
 }
 
-export default SignUp;
 
 const styles = StyleSheet.create({
     header: {
@@ -168,3 +218,14 @@ const styles = StyleSheet.create({
         borderBottomColor: '#8F97AC'
     }
 })
+const mapStatgetoprops=(state)=>{
+
+    const{jobs}=state.app;
+
+    return{
+        jobs,
+    }
+    }
+
+
+    export default connect(mapStatgetoprops,{Signupaction})(SignUp)

@@ -3,13 +3,43 @@ import { View, Dimensions, TouchableOpacity, Text, ScrollView, StyleSheet, } fro
 import Input from '../components/TextInput';
 import ButtonLarge from '../components/ButtonLarge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import {Loginaction} from '../Redux/Action/Action'
+import {connect} from 'react-redux';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-function Login({ navigation }) {
+function Login({ navigation,Loginaction }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+
+    const check= async()=>{
+
+
+        if(email=='')
+        {
+            alert('Enter Name')
+        }
+        else if(password=='')
+        {
+            alert('Enter password')
+        }
+        else {
+        const formdata=new FormData();
+        formdata.append('email',email);
+        formdata.append('password',password);
+    //   console.log(formdata)
+        const res=await Loginaction(formdata);
+console.log('resssssssssssssssssssssssssssssssssssssssssssssss',res)
+if(res.data!=0)
+{
+navigation.navigate('MainScreen')
+}
+else{
+    console.log('In correct')
+}
+        }
+    }
     return (
         <View style={{ flex: 1, backgroundColor: '#EEF1F8' }}>
             <View style={styles.header}>
@@ -53,14 +83,17 @@ function Login({ navigation }) {
 
                 <View style={{height: 100}} />
 
-                <ButtonLarge onPress={() => navigation.navigate("Search")} title="Sign in" />
+                <ButtonLarge onPress={check} title="Sign in"
+
+
+                />
 
             </ScrollView>
         </View>
     );
 }
 
-export default Login;
+// export default Login;
 
 const styles = StyleSheet.create({
     header: {
@@ -90,3 +123,15 @@ const styles = StyleSheet.create({
         borderBottomColor: '#8F97AC'
     }
 })
+
+const mapStatetoprops=(state)=>{
+
+    const{job}=state.app;
+
+    return{
+        job,
+    }
+    }
+
+
+    export default connect(mapStatetoprops,{Loginaction})(Login)

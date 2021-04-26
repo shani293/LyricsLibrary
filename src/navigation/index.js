@@ -13,13 +13,14 @@ import Copied from '../screens/Copied'
 import Favourites from '../screens/Favourites'
 import Deleted from '../screens/Deleted';
 import ShareLyrics from '../screens/ShareLyrics'
+import { NavigationContainer } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 
 export default function Navigation() {
 
     return (
-
+<NavigationContainer>
         <Stack.Navigator initialRouteName='MainScreen'
             screenOptions={{
                 headerShown: false
@@ -39,5 +40,6 @@ export default function Navigation() {
             <Stack.Screen name="ShareLyrics" component={ShareLyrics} />
 
         </Stack.Navigator>
+        </NavigationContainer>
     );
 }
